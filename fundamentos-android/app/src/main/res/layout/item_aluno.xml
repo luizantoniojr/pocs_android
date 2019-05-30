@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:layout_marginBottom="8dp"
-        tools:text="3222-2222" />
+        tools:text="3222-2222"
+        tools:targetApi="o" />
 
 </LinearLayout>

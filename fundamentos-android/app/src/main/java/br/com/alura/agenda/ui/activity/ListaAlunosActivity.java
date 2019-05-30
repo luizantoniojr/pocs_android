@@ -1,5 +1,7 @@
 package br.com.alura.agenda.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -83,8 +85,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
     }
 
     private void atualizarAdapter() {
-        adapter.clear();
-        adapter.addAll(dao.todos());
+        adapter.atualizar(dao.todos());
     }
 
     @Override
@@ -96,12 +97,27 @@ public class ListaAlunosActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.activity_lista_alunos_menu_remover)
-            tratarClickItemMenuRemover(item);
+            exibirConfirmacaoRemocao(item);
 
         return super.onContextItemSelected(item);
     }
 
-    private void tratarClickItemMenuRemover(MenuItem item) {
+    private void exibirConfirmacaoRemocao(final MenuItem item) {
+        new AlertDialog
+                .Builder(this)
+                .setTitle("Atenção")
+                .setMessage("Tem certeza que deseja remover o aluno?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        removerAluno(item);
+                    }
+                })
+                .setNegativeButton("Não", null)
+                .show();
+    }
+
+    private void removerAluno(MenuItem item) {
         AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Aluno alunoEscolhido = adapter.getItem(menuInfo.position);
         removerAluno(alunoEscolhido);
