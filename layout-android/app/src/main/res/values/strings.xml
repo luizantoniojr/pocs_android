@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Viagens</string>
     <string name="especiais">Especiais</string>
+    <string name="brasil">Brasil</string>
 </resources>
