@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">testes</string>
+    <string name="msgCPFInvalido">CPF inválido</string>
+    <string name="titulo">Validador de CPF</string>
+    <string name="alertTitle">Tudo certo</string>
+    <string name="alertMensagem">O CPF informado é válido</string>
+    <string name="alertTextPositiveButton">Ok</string>
+</resources>
