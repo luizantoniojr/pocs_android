@@ -1,7 +1,9 @@
 package com.pocs.livedata;
 
 import android.os.Bundle;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,35 +11,40 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import static com.pocs.livedata.R.layout;
-import static com.pocs.livedata.R.string;
 
 public class MainActivity extends AppCompatActivity {
 
-    private PessoaViewModel pessoa;
-    private EditText nomeEditText;
+    private ContadorViewModel contadorViewModel;
+    private TextView valorTextView;
+    private Button botao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_main);
-        setTitle(string.cadastro_de_pessoa);
 
-        nomeEditText = findViewById(R.id.nomeEditText);
+        contadorViewModel = ViewModelProviders.of(this).get(ContadorViewModel.class);
 
+        valorTextView = findViewById(R.id.countTextView);
 
-        //Definindo relação entre a ViewModel e o UI Controller.
-        pessoa = ViewModelProviders.of(this).get(PessoaViewModel.class);
-
-
-        // Criando o observer que atualizará a UI
-        final Observer<String> nomeObserver= new Observer<String>() {
+        botao = findViewById(R.id.countButton);
+        botao.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(@Nullable final String nome) {
-                nomeEditText.setText(nome);
-            }
-        };
+            public void onClick(View view) {
+                Integer valorNaViewModel = contadorViewModel.getValor().getValue();
+                int valor = valorNaViewModel != null ? valorNaViewModel : 0;
 
-        //observa o LiveData, passando esta activity como o LifecycleOwner e o observer.
-        pessoa.getNome().observe(this, nomeObserver);
+                valor++;
+
+                contadorViewModel.getValor().setValue(valor);
+            }
+        });
+
+        contadorViewModel.getValor().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable final Integer valor) {
+                valorTextView.setText(valor.toString());
+            }
+        });
     }
 }
