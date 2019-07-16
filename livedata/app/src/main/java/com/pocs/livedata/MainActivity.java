@@ -31,15 +31,23 @@ public class MainActivity extends AppCompatActivity {
         botao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer valorNaViewModel = contadorViewModel.getValor().getValue();
-                int valor = valorNaViewModel != null ? valorNaViewModel : 0;
-
-                valor++;
-
-                contadorViewModel.getValor().setValue(valor);
+                incrementarValorNaViewModel();
             }
         });
 
+        definirObservador();
+    }
+
+    private void incrementarValorNaViewModel() {
+        Integer valorNaViewModel = contadorViewModel.getValor().getValue();
+        int valor = valorNaViewModel != null ? valorNaViewModel : 0;
+
+        valor++;
+
+        contadorViewModel.getValor().setValue(valor);
+    }
+
+    private void definirObservador() {
         contadorViewModel.getValor().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable final Integer valor) {
