@@ -12,7 +12,10 @@ import android.widget.TextView;
 
 import com.pocs.viagens.R;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.alura.aluraviagens.model.Pacote;
 
@@ -21,7 +24,7 @@ public class ListaPacotesAdapter extends BaseAdapter {
     private final List<Pacote> pacotes;
     private Context context;
 
-    public ListaPacotesAdapter(List<Pacote> pacotes, Context context){
+    public ListaPacotesAdapter(List<Pacote> pacotes, Context context) {
         this.pacotes = pacotes;
         this.context = context;
     }
@@ -57,10 +60,13 @@ public class ListaPacotesAdapter extends BaseAdapter {
         imagem.setImageDrawable(drawable);
 
         TextView dias = viewCriada.findViewById(R.id.item_pacote_dias);
-        dias.setText(String.format(context.getString(R.string.digito_dias), pacote.getDias()));
+        int quantidadeDias = pacote.getDias();
+        dias.setText(context.getResources().getQuantityString(R.plurals.plural_dia, quantidadeDias, quantidadeDias));
 
         TextView preco = viewCriada.findViewById(R.id.item_pacote_preco);
-        preco.setText(pacote.getPreco().toString());
+        NumberFormat formatadorRealBrasil = DecimalFormat.getCurrencyInstance(new Locale("pt", "br"));
+        String precoFormatado = formatadorRealBrasil.format(pacote.getPreco());
+        preco.setText(precoFormatado);
 
         return viewCriada;
     }
