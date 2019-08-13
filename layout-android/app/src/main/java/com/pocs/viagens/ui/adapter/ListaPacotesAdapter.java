@@ -22,7 +22,7 @@ import br.com.alura.aluraviagens.model.Pacote;
 public class ListaPacotesAdapter extends BaseAdapter {
 
     private final List<Pacote> pacotes;
-    private Context context;
+    private final Context context;
 
     public ListaPacotesAdapter(List<Pacote> pacotes, Context context) {
         this.pacotes = pacotes;
@@ -35,39 +35,51 @@ public class ListaPacotesAdapter extends BaseAdapter {
     }
 
     @Override
-    public Pacote getItem(int position) {
-        return pacotes.get(position);
+    public Pacote getItem(int posicao) {
+        return pacotes.get(posicao);
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(int posicao) {
         return 0;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int posicao, View convertView, ViewGroup parent) {
         View viewCriada = LayoutInflater.from(context).inflate(R.layout.item_pacote, parent, false);
+        Pacote pacote = this.getItem(posicao);
 
-        Pacote pacote = this.getItem(position);
+        mostraLocal(viewCriada, pacote);
+        mostraImagem(viewCriada, pacote);
+        mostraDias(viewCriada, pacote);
+        mostraPreco(viewCriada, pacote);
 
-        TextView local = viewCriada.findViewById(R.id.item_pacote_local);
-        local.setText(pacote.getLocal());
+        return viewCriada;
+    }
 
+    private void mostraPreco(View viewCriada, Pacote pacote) {
+        TextView preco = viewCriada.findViewById(R.id.item_pacote_preco);
+        NumberFormat formatadorRealBrasil = DecimalFormat.getCurrencyInstance(new Locale("pt", "br"));
+        String precoFormatado = formatadorRealBrasil.format(pacote.getPreco());
+        preco.setText(precoFormatado);
+    }
+
+    private void mostraDias(View viewCriada, Pacote pacote) {
+        TextView dias = viewCriada.findViewById(R.id.item_pacote_dias);
+        int quantidadeDias = pacote.getDias();
+        dias.setText(context.getResources().getQuantityString(R.plurals.plural_dia, quantidadeDias, quantidadeDias));
+    }
+
+    private void mostraImagem(View viewCriada, Pacote pacote) {
         ImageView imagem = viewCriada.findViewById(R.id.item_pacote_imagem);
         Resources resources = context.getResources();
         int idDrawable = resources.getIdentifier(pacote.getImagem(), "drawable", context.getPackageName());
         Drawable drawable = resources.getDrawable(idDrawable);
         imagem.setImageDrawable(drawable);
+    }
 
-        TextView dias = viewCriada.findViewById(R.id.item_pacote_dias);
-        int quantidadeDias = pacote.getDias();
-        dias.setText(context.getResources().getQuantityString(R.plurals.plural_dia, quantidadeDias, quantidadeDias));
-
-        TextView preco = viewCriada.findViewById(R.id.item_pacote_preco);
-        NumberFormat formatadorRealBrasil = DecimalFormat.getCurrencyInstance(new Locale("pt", "br"));
-        String precoFormatado = formatadorRealBrasil.format(pacote.getPreco());
-        preco.setText(precoFormatado);
-
-        return viewCriada;
+    private void mostraLocal(View viewCriada, Pacote pacote) {
+        TextView local = viewCriada.findViewById(R.id.item_pacote_local);
+        local.setText(pacote.getLocal());
     }
 }
